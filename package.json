@@ -1,0 +1,35 @@
+{
+  "name": "web-systems-lab",
+  "version": "0.0.0",
+  "scripts": {
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arabi-1/web-systems-lab.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/arabi-1/web-systems-lab/issues"
+  },
+  "homepage": "https://github.com/arabi-1/web-systems-lab#readme",
+  "engines": {
+    "node": ">=22"
+  },
+  "private": true,
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.12.0",
+    "eslint-config-prettier": "10.1.8",
+    "globals": "17.13.0",
+    "husky": "9.1.7",
+    "lint-staged": "17.6.0",
+    "prettier": "3.9.10",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.2"
+  }
+}

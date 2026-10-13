@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  HUSKY: 0
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [22, 24]
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Test changed labs
+        env:
+          EVENT: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
+        run: |
+          set -euo pipefail
+
+          if [ "$EVENT" = "pull_request" ]; then
+            BASE="$PR_BASE"
+          else
+            BASE="$PUSH_BEFORE"
+          fi
+
+          shopt -s nullglob
+          labs=(labs/*/)
+          if [ ${#labs[@]} -eq 0 ]; then
+            echo "No labs yet, nothing to test."
+            exit 0
+          fi
+
+          changed=""
+          run_all=false
+          if [ -z "$BASE" ] || [[ "$BASE" =~ ^0+$ ]] || ! git cat-file -e "${BASE}^{commit}" 2>/dev/null; then
+            run_all=true
+          else
+            changed=$(git diff --name-only "$BASE" HEAD)
+            if grep -qE '^(package\.json|package-lock\.json|eslint\.config\.js|\.prettierrc\.json|\.nvmrc|\.github/)' <<< "$changed"; then
+              run_all=true
+            fi
+          fi
+
+          for lab in "${labs[@]}"; do
+            lab="${lab%/}"
+            if [ "$run_all" = true ] || grep -q "^${lab}/" <<< "$changed"; then
+              echo "::group::$lab"
+              (cd "$lab" && npm ci && npm test)
+              echo "::endgroup::"
+            else
+              echo "Skipping $lab (unchanged)"
+            fi
+          done
