@@ -6,9 +6,9 @@ Coursework for **CSC337 Advanced Web Technologies** (COMSATS University Islamaba
 
 ## Labs
 
-| Lab                                                               | Topic                                 | Stack                               | Status      |
-| ----------------------------------------------------------------- | ------------------------------------- | ----------------------------------- | ----------- |
-| [lab01_service-request-server](labs/lab01_service-request-server) | Service request server, no frameworks | Node.js core (http, fs), JSON store | In progress |
+| Lab                                                               | Topic                                 | Stack                               | Status   |
+| ----------------------------------------------------------------- | ------------------------------------- | ----------------------------------- | -------- |
+| [lab01_service-request-server](labs/lab01_service-request-server) | Service request server, no frameworks | Node.js core (http, fs), JSON store | Complete |
 
 ## Repository layout
 
