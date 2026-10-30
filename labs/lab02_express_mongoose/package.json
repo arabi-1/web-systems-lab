@@ -1,0 +1,25 @@
+{
+  "name": "lab02-express-mongoose",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test",
+    "lint": "eslint src tests",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "mongoose": "^8.18.0"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "^10.2.0",
+    "supertest": "^7.1.4"
+  }
+}
